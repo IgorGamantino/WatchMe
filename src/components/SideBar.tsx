@@ -1,6 +1,7 @@
-import { Dispatch,  } from 'react';
+import { Dispatch, useEffect, useState,  } from 'react';
 import { Button } from '../components/Button';
 import {useGenre} from '../hooks/useGenre'
+import { api } from '../services/api';
 
 interface GenreResponseProps {
   id: number;
@@ -12,6 +13,12 @@ interface GenreResponseProps {
 export function SideBar() {
    const {selectedGenreId,setSelectedGenreId,} = useGenre();
    const [genres, setGenres] = useState<GenreResponseProps[]>([]);
+
+   useEffect(() => {
+    api.get<GenreResponseProps[]>('genres').then(response => {
+      setGenres(response.data);
+    });
+  }, []);
 
   function handleClickButton(id: number) {
     setSelectedGenreId(id);
